@@ -19,13 +19,18 @@ from pandas import read_csv
 # print data[0]
 
 
-train = read_csv(join(BASE_DIR, "data", "train.csv"))
-data = train.as_matrix()
-save(join(BASE_DIR, 'train_raw_incl_id_cls.npy'), data)
-
-
 test = read_csv(join(BASE_DIR, "data", "test.csv"))
+print 'read done'
 data = test.as_matrix()
-save(join(BASE_DIR, 'test_raw_incl_id_cls.npy'), data)
+print 'matrix done'
+del test
+print 'cleaned up pandas'
+save(join(BASE_DIR, 'data', 'train_raw_incl_id_cls.npy'), data)
+print 'ready!'
+
+
+#test = read_csv(join(BASE_DIR, "data", "test.csv"))
+#data = test.as_matrix()
+#save(join(BASE_DIR, 'test_raw_incl_id_cls.npy'), data)
 
 
