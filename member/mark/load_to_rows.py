@@ -5,11 +5,13 @@ from settings import BASE_DIR
 from re import compile
 
 
+fname = 'train'
+
 rgx = compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
 data = []
 length = None
 
-with open(join(BASE_DIR, "data", "play.csv"), 'r') as fh:
+with open(join(BASE_DIR, 'data', '{0:s}.csv'.format(fname)), 'r') as fh:
 	""" Line-by-line so as to not consume much memory """
 	linenr = 0
 	for line in fh:
@@ -25,12 +27,17 @@ with open(join(BASE_DIR, "data", "play.csv"), 'r') as fh:
 			continue
 		for indx, value in enumerate(parts):
 			data[indx].append(value)
+		if not linenr % 1000:
+			print 'reading line {0:d}'.format(linenr)
 
-for nr, column in enumerate(data):
+for colnr, column in enumerate(data):
 	arr = array(column[1:])
-	save(join(BASE_DIR, 'data', 'row{0:03d}.npy'.format(nr)), arr)
+	save(join(BASE_DIR, 'data', '{0:s}_row{1:03d}.npy'.format(fname, colnr)), arr)
+	if not colnr % 25:
+		print 'saving column {0:d}'.format(colnr)
 
-for nr, column in enumerate(data):
-	print load(join(BASE_DIR, 'data', 'row{0:03d}.npy'.format(nr)))
+
+#for nr, column in enumerate(data):
+#	print load(join(BASE_DIR, 'data', 'row{0:03d}.npy'.format(nr)))
 
 
