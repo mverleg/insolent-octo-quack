@@ -1,16 +1,12 @@
 
-"""
-	Loading and saving of data.
-"""
-
-from os.path import join
 import gc
-from tempfile import mktemp, gettempdir
-from numpy import array, uint8, save, vstack, load, hstack
+from os.path import join
+from tempfile import gettempdir
+from numpy import array, uint8, save, load, hstack
 from numpy.core.defchararray import strip, replace
 from os import remove
-from settings import BASE_DIR
 from re import compile
+from settings import BASE_DIR
 
 
 rgx = compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
@@ -61,7 +57,7 @@ def to_ints_only(data):
 	for col in data:
 		colnr += 1
 		if colnr % 100 == 0:
-			print 'converting column {0:d}...'.format(colnr)
+			print('converting column {0:d}...'.format(colnr))
 		col = replace(col, '""', '0')
 		col = replace(col, 'NA', '0')
 		col = replace(col, 'false', '0')
@@ -73,12 +69,14 @@ def to_ints_only(data):
 			failed.append(str(err).split(':', 1)[1])
 		else:
 			conv.append(irow)
+		del col
+		gc.collect()  # free memory
 	print('failed for', failed)
 	print('{0:d} columns removed'.format(len(failed)))
 	return array(conv)
 
 
-def batch_load_ints(fpath = fpath_default, batch_size = 8000):
+def batch_load_ints(fpath = fpath_default, batch_size = 2500):
 	cursor = 0
 	tmpdir = gettempdir()
 	bfiles = []
@@ -97,12 +95,11 @@ def batch_load_ints(fpath = fpath_default, batch_size = 8000):
 		if row_count < batch_size:
 			print('stopping since last batch reached end of file')
 			break
-	parts = []
-	for bpath in bfiles:
-		parts.append(load(bpath))
+	print('going to merge data')
+	merged = load(bfiles[0])
+	for bpath in bfiles[1:]:
+		merged = hstack((merged, load(bpath),))
 		remove(bpath)
-	merged = hstack(parts)
-	del parts
 	gc.collect()
 	return merged
 
