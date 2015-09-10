@@ -1,0 +1,11 @@
+{
+  "default": {
+    "equalize": true
+  },
+  "1": {
+    "shift": 1,
+    "undefined": [],
+    "cut_gt": 50,
+    "cut_to": 0
+  }
+}
