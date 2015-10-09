@@ -4,7 +4,8 @@
 """
 
 from numpy import array, linspace, histogram, cumsum, sqrt
-from transform import equalize
+
+from utils.transform import equalize
 
 
 def test_equalize():

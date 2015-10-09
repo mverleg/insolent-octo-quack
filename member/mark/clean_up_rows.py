@@ -1,13 +1,13 @@
-
 from glob import glob
 import json
-from numpy import load, array
 from copy import copy
 from os.path import join
-from settings import BASE_DIR
-from matplotlib.pyplot import subplots, show, close
-from transform import equalize
 
+from numpy import load, array
+from matplotlib.pyplot import subplots, show, close
+
+from settings import BASE_DIR
+from utils.transform import equalize
 
 basefname = 'train'
 

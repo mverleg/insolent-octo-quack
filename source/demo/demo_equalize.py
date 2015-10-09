@@ -1,7 +1,7 @@
-
 from numpy import array, cumsum, histogram
-from transform import equalize
 from matplotlib.pyplot import subplots, show
+
+from utils.transform import equalize
 
 
 def plot_equalize():
